@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,10 +8,60 @@
     android:layout_height="match_parent"
     tools:context=".StartActivity">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/green_background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/game_title"
+                android:layout_width="match_parent"
+                android:layout_height="450dp"
+                android:gravity="center"
+                android:textSize="90sp"
+                android:text="@string/jack_black"/>
+
+            <Button
+                android:id="@+id/start_game_btn"
+                android:layout_width="300dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:text="@string/start_game_btn_text"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/black"
+                android:textSize="25sp" />
+
+            <Button
+                android:id="@+id/statistic_btn"
+                android:layout_width="300dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:textSize="25sp"
+                android:text="@string/statistic_btn_text"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/black"
+                />
+
+            <Button
+                android:id="@+id/exit_btn"
+                android:layout_width="300dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:textSize="25sp"
+                android:text="@string/exit_btn_text"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/black"
+                />
+
+
+        </LinearLayout>
+
     </RelativeLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

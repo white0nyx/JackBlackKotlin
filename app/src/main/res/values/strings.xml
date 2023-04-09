@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="jack_black">JACK BLACK</string>
+    <string name="start_game_btn_text">СТАРТ</string>
+    <string name="statistic_btn_text">СТАТИСТИКА</string>
+    <string name="exit_btn_text">ВЫХОД</string>
 </resources>
