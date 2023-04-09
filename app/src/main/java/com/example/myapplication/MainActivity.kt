@@ -80,6 +80,17 @@ class MainActivity : AppCompatActivity() {
         text_view.append("$shuffled_cards")
 
 
+        fun more_card(shuffled_cards: MutableList<String>){
+            var rand_card = shuffled_cards[0]
+            shuffled_cards.removeAt(0)
+            player_cards.add(rand_card)
+
+            text_view.text = "Карты диллера: $diller_cards\nОчков у диллера: $diller_points\n\n" +
+                    "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
+            text_view.append("$shuffled_cards")
+        }
+
+        more_btn.setOnClickListener { more_card(shuffled_cards) }
     }
 
 }
