@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
@@ -70,9 +69,31 @@ class MainActivity : AppCompatActivity() {
         var player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
         shuffled_cards.removeAt(0)
         shuffled_cards.removeAt(0)
+        fun get_points(cards: MutableList<String>, count_points_now: Int): Int {
+            var total_points = 0
+            for (card in cards) {
+                val base_card = card.substring(0, card.length - 1)
 
+                if (base_card == "A" && count_points_now >= 11) {
+                    total_points += 1
+                }
+
+                else {
+                    val card_power = cards_powers[base_card]
+                    if (card_power != null) {
+                        total_points += card_power
+                    }
+                }
+
+            }
+
+            return total_points
+        }
         var diller_points = 0
         var player_points = 0
+
+        player_points = get_points(player_cards, player_points)
+        diller_points = get_points(diller_cards, diller_points)
 
 
         text_view.text = "Карты диллера: $diller_cards\nОчков у диллера: $diller_points\n\n" +
@@ -80,15 +101,21 @@ class MainActivity : AppCompatActivity() {
         text_view.append("$shuffled_cards")
 
 
-        fun more_card(shuffled_cards: MutableList<String>){
-            var rand_card = shuffled_cards[0]
+
+        fun more_card(shuffled_cards: MutableList<String>) {
+            var random_card = shuffled_cards[0]
             shuffled_cards.removeAt(0)
-            player_cards.add(rand_card)
+            player_cards.add(random_card)
+
+            player_points = get_points(player_cards, player_points)
+            diller_points = get_points(diller_cards, diller_points)
 
             text_view.text = "Карты диллера: $diller_cards\nОчков у диллера: $diller_points\n\n" +
                     "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
             text_view.append("$shuffled_cards")
         }
+
+
 
         more_btn.setOnClickListener { more_card(shuffled_cards) }
     }
