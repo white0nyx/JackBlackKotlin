@@ -48,13 +48,6 @@ class MainActivity : AppCompatActivity() {
             "A♠", "A♥", "A♣", "A♦",
         )
 
-        start_btn.setOnClickListener { start_game(cards); start_btn.visibility = View.GONE}
-
-
-    }
-
-    // Нажатие на кнопку старт
-    fun start_game(cards: List<String>) {
         val shuffled_cards = cards.shuffled().toMutableList()
         val text_view = findViewById<TextView>(R.id.textView)
 
@@ -72,6 +65,8 @@ class MainActivity : AppCompatActivity() {
         text_view.text = "Карты диллера: $diller_cards\nОчков у диллера: $diller_points\n\n" +
                 "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
         text_view.append("$shuffled_cards")
+
+
     }
 
 }

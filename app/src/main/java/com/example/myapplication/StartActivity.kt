@@ -13,6 +13,12 @@ class StartActivity : AppCompatActivity() {
 
         val exitButton = findViewById<Button>(R.id.exit_btn)
         exitButton.setOnClickListener {finishAffinity()}
+
+        val startGameBtn = findViewById<Button>(R.id.start_game_btn)
+        startGameBtn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 }
