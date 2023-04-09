@@ -27,22 +27,33 @@
             android:layout_height="581dp"
             android:text="TextView" />
 
-        <Button
-            android:id="@+id/button_start"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="СТАРТ" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
 
-        <Button
-            android:id="@+id/button_more"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ЕЩЁ" />
 
-        <Button
-            android:id="@+id/button_stop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ХВАТИТ" />
+            <Button
+                android:id="@+id/button_more"
+                android:layout_width="242dp"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/green"
+                android:text="ЕЩЁ"
+
+                android:textSize="25sp" />
+
+            <Button
+                android:id="@+id/button_stop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="25sp"
+                android:backgroundTint="@color/red"
+                android:layout_margin="5dp"
+                android:text="ХВАТИТ" />
+        </LinearLayout>
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

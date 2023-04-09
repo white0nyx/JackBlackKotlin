@@ -11,7 +11,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val start_btn = findViewById<Button>(R.id.button_start)
         val more_btn = findViewById<Button>(R.id.button_more)
         val stop_btn = findViewById<Button>(R.id.button_stop)
 
