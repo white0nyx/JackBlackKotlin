@@ -1,18 +1,32 @@
 package com.example.myapplication
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
-import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val stop_game_btn = findViewById<ImageButton>(R.id.stop_game_btn)
         val more_btn = findViewById<Button>(R.id.button_more)
         val stop_btn = findViewById<Button>(R.id.button_stop)
+
+        stop_game_btn.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("Вы уверены, что хотите покинуть игру? Выход из игры будет засчитан, как поражение.")
+                .setCancelable(false)
+                .setPositiveButton("Да") { dialog, id -> finish() }
+                .setNegativeButton("Нет", null)
+            val alert = builder.create()
+            alert.show()
+        }
 
 
         val cards_powers = mapOf(
