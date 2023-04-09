@@ -66,10 +66,10 @@ class MainActivity : AppCompatActivity() {
 
         var diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
         shuffled_cards.removeAt(0)
-        shuffled_cards.removeAt(1)
+        shuffled_cards.removeAt(0)
         var player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
         shuffled_cards.removeAt(0)
-        shuffled_cards.removeAt(1)
+        shuffled_cards.removeAt(0)
 
         var diller_points = 0
         var player_points = 0
