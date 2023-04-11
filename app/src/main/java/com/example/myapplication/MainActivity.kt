@@ -63,13 +63,15 @@ class MainActivity : AppCompatActivity() {
             "A♠", "A♥", "A♣", "A♦",
         )
 
-        val shuffled_cards = cards.shuffled().toMutableList()
+
 
 //        ДЛЯ ТЕСТОВ
 //        val shuffled_cards = mutableListOf("A♠", "9♠", "A♥", "9♥", "A♥", "3♥", "3♣")
 
         val text_view = findViewById<TextView>(R.id.textView)
 
+
+        val shuffled_cards = cards.shuffled().toMutableList()
         var diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
         shuffled_cards.removeAt(0)
         shuffled_cards.removeAt(0)
@@ -134,7 +136,12 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        text_view.text = "Карты диллера: ## ${diller_cards.subList(1, diller_cards.lastIndex + 1)}\nОчков у диллера: $diller_points\n\n" +
+        text_view.text = "Карты диллера: ## ${
+            diller_cards.subList(
+                1,
+                diller_cards.lastIndex + 1
+            )
+        }\nОчков у диллера: $diller_points\n\n" +
                 "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
         text_view.append("${shuffled_cards}")
 
@@ -154,14 +161,46 @@ class MainActivity : AppCompatActivity() {
             player_points = get_points(player_cards)
             diller_points = get_points(diller_cards)
 
-            text_view.text = "Карты диллера: ## ${diller_cards.subList(1, diller_cards.lastIndex  + 1)}\nОчков у диллера: $diller_points\n\n" +
+            text_view.text = "Карты диллера: ## ${
+                diller_cards.subList(1, diller_cards.lastIndex + 1)}\nОчков у диллера: $diller_points\n\n" +
                     "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
             text_view.append("$shuffled_cards")
         }
+        fun reset_game() {
 
-        fun enough() {
+            val shuffled_cards = cards.shuffled().toMutableList()
+            diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
+            shuffled_cards.removeAt(0)
+            shuffled_cards.removeAt(0)
+            player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
+            shuffled_cards.removeAt(0)
+            shuffled_cards.removeAt(0)
+
+            player_points = get_points(player_cards)
+            diller_points = get_points(diller_cards)
+
+            text_view.text = "Карты диллера: ## ${
+                diller_cards.subList(1, diller_cards.lastIndex + 1)}\nОчков у диллера: $diller_points\n\n" +
+            "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
+            text_view.append("$shuffled_cards")
 
         }
+        fun enough() {
+            text_view.text = "Карты диллера: ${diller_cards}\nОчков у диллера: $diller_points\n\n" +
+                    "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
+            text_view.append("$shuffled_cards")
+
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("Вы уверены, что хотите покинуть игру? Выход из игры будет засчитан, как поражение.")
+                .setCancelable(false)
+                .setNegativeButton("Выйти", { dialog, id -> finish() })
+                .setPositiveButton("Новая игра",  { dialog, id -> reset_game() })
+
+            val alert = builder.create()
+            alert.show()
+        }
+
+
 
         more_btn.setOnClickListener { more_card(shuffled_cards) }
         stop_btn.setOnClickListener { enough() }
