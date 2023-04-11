@@ -66,39 +66,57 @@ class MainActivity : AppCompatActivity() {
         val shuffled_cards = cards.shuffled().toMutableList()
         val text_view = findViewById<TextView>(R.id.textView)
 
-        var diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
+        val diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
         shuffled_cards.removeAt(0)
         shuffled_cards.removeAt(0)
-        var player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
+        val player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
         shuffled_cards.removeAt(0)
         shuffled_cards.removeAt(0)
 
 
-        fun get_points(cards: MutableList<String>, count_points_now: Int): Int {
-            var total_points = 0
+//        fun get_points(cards: MutableList<String>, count_points_now: Int): Int {
+//            var total_points = 0
+//            for (card in cards) {
+//                val base_card = card.substring(0, card.length - 1)
+//
+//                if (base_card == "A" && count_points_now >= 10) {
+//                    total_points += 1
+//
+//                } else {
+//                    val card_power = cards_powers[base_card]
+//                    if (card_power != null) {
+//                        total_points += card_power
+//                    }
+//                }
+//
+//            }
+//
+//            return total_points
+//        }
+
+        fun get_points(cards: MutableList<String>): Int {
+            var points = 0
+            var aces = 0
             for (card in cards) {
-                val base_card = card.substring(0, card.length - 1)
-
-                if (base_card == "A" && count_points_now >= 10) {
-                    total_points += 1
-
+                if (card == "A") {
+                    aces += 1
+                    points += 11
                 } else {
-                    val card_power = cards_powers[base_card]
-                    if (card_power != null) {
-                        total_points += card_power
-                    }
+                    points += cards_powers[card] ?: 0
                 }
-
             }
-
-            return total_points
+            while (points > 21 && aces > 0) {
+                points -= 10
+                aces -= 1
+            }
+            return points
         }
 
         var diller_points = 0
         var player_points = 0
 
-        player_points = get_points(player_cards, player_points)
-        diller_points = get_points(diller_cards, diller_points)
+        player_points = get_points(player_cards)
+        diller_points = get_points(diller_cards)
 
         var is_fast_diller_win = false
         if (diller_points == 21) {
@@ -115,21 +133,20 @@ class MainActivity : AppCompatActivity() {
                 "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
         text_view.append("${shuffled_cards}")
 
-
         fun more_card(shuffled_cards: MutableList<String>) {
-            var diller_points_now = get_points(diller_cards, diller_points)
+            var diller_points_now = get_points(diller_cards)
             Log.d("Ошибка", "$diller_points_now")
             while (diller_points_now < 17) {
                 diller_cards.add(shuffled_cards[0])
                 shuffled_cards.removeAt(0)
-                diller_points_now = get_points(diller_cards, diller_points)
+                diller_points_now = get_points(diller_cards)
             }
 
             player_cards.add(shuffled_cards[0])
             shuffled_cards.removeAt(0)
 
-            player_points = get_points(player_cards, player_points)
-            diller_points = get_points(diller_cards, diller_points)
+            player_points = get_points(player_cards)
+            diller_points = get_points(diller_cards)
 
             text_view.text = "Карты диллера: $diller_cards\nОчков у диллера: $diller_points\n\n" +
                     "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
