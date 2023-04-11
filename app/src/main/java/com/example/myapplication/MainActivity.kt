@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        text_view.text = "Карты диллера: $diller_cards\nОчков у диллера: $diller_points\n\n" +
+        text_view.text = "Карты диллера: ## ${diller_cards.subList(1, diller_cards.lastIndex + 1)}\nОчков у диллера: $diller_points\n\n" +
                 "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
         text_view.append("${shuffled_cards}")
 
@@ -154,12 +154,17 @@ class MainActivity : AppCompatActivity() {
             player_points = get_points(player_cards)
             diller_points = get_points(diller_cards)
 
-            text_view.text = "Карты диллера: $diller_cards\nОчков у диллера: $diller_points\n\n" +
+            text_view.text = "Карты диллера: ## ${diller_cards.subList(1, diller_cards.lastIndex  + 1)}\nОчков у диллера: $diller_points\n\n" +
                     "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
             text_view.append("$shuffled_cards")
         }
 
+        fun enough() {
+
+        }
+
         more_btn.setOnClickListener { more_card(shuffled_cards) }
+        stop_btn.setOnClickListener { enough() }
 
     }
 }
