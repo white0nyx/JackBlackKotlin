@@ -64,12 +64,16 @@ class MainActivity : AppCompatActivity() {
         )
 
         val shuffled_cards = cards.shuffled().toMutableList()
+
+//        ДЛЯ ТЕСТОВ
+//        val shuffled_cards = mutableListOf("A♠", "9♠", "A♥", "9♥", "A♥", "3♥", "3♣")
+
         val text_view = findViewById<TextView>(R.id.textView)
 
-        val diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
+        var diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
         shuffled_cards.removeAt(0)
         shuffled_cards.removeAt(0)
-        val player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
+        var player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
         shuffled_cards.removeAt(0)
         shuffled_cards.removeAt(0)
 
@@ -98,11 +102,12 @@ class MainActivity : AppCompatActivity() {
             var points = 0
             var aces = 0
             for (card in cards) {
-                if (card == "A") {
+                val card_base = card.substring(0, card.length - 1)
+                if (card_base == "A") {
                     aces += 1
                     points += 11
                 } else {
-                    points += cards_powers[card] ?: 0
+                    points += cards_powers[card_base] ?: 0
                 }
             }
             while (points > 21 && aces > 0) {
@@ -132,6 +137,7 @@ class MainActivity : AppCompatActivity() {
         text_view.text = "Карты диллера: $diller_cards\nОчков у диллера: $diller_points\n\n" +
                 "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
         text_view.append("${shuffled_cards}")
+
 
         fun more_card(shuffled_cards: MutableList<String>) {
             var diller_points_now = get_points(diller_cards)
