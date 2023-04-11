@@ -146,26 +146,6 @@ class MainActivity : AppCompatActivity() {
         text_view.append("${shuffled_cards}")
 
 
-        fun more_card(shuffled_cards: MutableList<String>) {
-            var diller_points_now = get_points(diller_cards)
-            Log.d("Ошибка", "$diller_points_now")
-            while (diller_points_now < 17) {
-                diller_cards.add(shuffled_cards[0])
-                shuffled_cards.removeAt(0)
-                diller_points_now = get_points(diller_cards)
-            }
-
-            player_cards.add(shuffled_cards[0])
-            shuffled_cards.removeAt(0)
-
-            player_points = get_points(player_cards)
-            diller_points = get_points(diller_cards)
-
-            text_view.text = "Карты диллера: ## ${
-                diller_cards.subList(1, diller_cards.lastIndex + 1)}\nОчков у диллера: $diller_points\n\n" +
-                    "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
-            text_view.append("$shuffled_cards")
-        }
         fun reset_game() {
 
             val shuffled_cards = cards.shuffled().toMutableList()
@@ -181,23 +161,85 @@ class MainActivity : AppCompatActivity() {
 
             text_view.text = "Карты диллера: ## ${
                 diller_cards.subList(1, diller_cards.lastIndex + 1)}\nОчков у диллера: $diller_points\n\n" +
-            "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
-            text_view.append("$shuffled_cards")
-
-        }
-        fun enough() {
-            text_view.text = "Карты диллера: ${diller_cards}\nОчков у диллера: $diller_points\n\n" +
                     "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
             text_view.append("$shuffled_cards")
 
-            val builder = AlertDialog.Builder(this)
-            builder.setMessage("Вы уверены, что хотите покинуть игру? Выход из игры будет засчитан, как поражение.")
-                .setCancelable(false)
-                .setNegativeButton("Выйти", { dialog, id -> finish() })
-                .setPositiveButton("Новая игра",  { dialog, id -> reset_game() })
+        }
 
-            val alert = builder.create()
-            alert.show()
+
+        fun more_card(shuffled_cards: MutableList<String>) {
+//            var diller_points_now = get_points(diller_cards)
+//            Log.d("Ошибка", "$diller_points_now")
+//            while (diller_points_now < 17) {
+//                diller_cards.add(shuffled_cards[0])
+//                shuffled_cards.removeAt(0)
+//                diller_points_now = get_points(diller_cards)
+//            }
+
+            player_cards.add(shuffled_cards[0])
+            shuffled_cards.removeAt(0)
+
+            player_points = get_points(player_cards)
+            diller_points = get_points(diller_cards)
+
+
+
+            text_view.text = "Карты диллера: ## ${
+                diller_cards.subList(1, diller_cards.lastIndex + 1)}\nОчков у диллера: $diller_points\n\n" +
+                    "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
+            text_view.append("$shuffled_cards")
+
+            if (player_points > 21) {
+
+                text_view.text = "Карты диллера: ${diller_cards}\nОчков у диллера: $diller_points\n\n" +
+                        "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
+                text_view.append("$shuffled_cards")
+
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Вы проиграли!")
+                    .setCancelable(false)
+                    .setNegativeButton("Выйти", { dialog, id -> finish() })
+                    .setPositiveButton("Новая игра",  { dialog, id -> reset_game() })
+
+                val alert = builder.create()
+                alert.show()
+            }
+        }
+
+        fun enough() {
+
+            var diller_points = get_points(diller_cards)
+            Log.d("Ошибка", "$diller_points")
+            while (diller_points < 17) {
+                diller_cards.add(shuffled_cards[0])
+                shuffled_cards.removeAt(0)
+                diller_points = get_points(diller_cards)
+            }
+            Log.d("Ошибка", "$diller_points")
+            if (diller_points > player_points) {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Вы проиграли!")
+                    .setCancelable(false)
+                    .setNegativeButton("Выйти", { dialog, id -> finish() })
+                    .setPositiveButton("Новая игра",  { dialog, id -> reset_game() })
+
+                val alert = builder.create()
+                alert.show()
+            }
+            else {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Вы победили!")
+                    .setCancelable(false)
+                    .setNegativeButton("Выйти", { dialog, id -> finish() })
+                    .setPositiveButton("Новая игра",  { dialog, id -> reset_game() })
+
+                val alert = builder.create()
+                alert.show()
+            }
+
+            text_view.text = "Карты диллера: ${diller_cards}\nОчков у диллера: $diller_points\n\n" +
+                    "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
+            text_view.append("$shuffled_cards")
         }
 
 
