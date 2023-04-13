@@ -1,7 +1,6 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
@@ -77,15 +76,23 @@ class MainActivity : AppCompatActivity() {
         val diller_cards_layout = findViewById<LinearLayout>(R.id.diller_cards_layout)
         val player_cards_layout = findViewById<LinearLayout>(R.id.player_cards_layout)
 
-        fun create_card(value: String, who: String) {
+        fun create_card(value: String, who: String, hide: Boolean) {
             val button = Button(this).apply {
                 layoutParams = ViewGroup.MarginLayoutParams(83.dpToPx(), 113.dpToPx()).apply {
                     setMargins(8.dpToPx(), 0, 0, 0)
                 }
-                setBackgroundResource(R.drawable.button_background)
+
+                if (hide) {
+                    setBackgroundResource(R.drawable.card_background_hide)
+                }
+
+                else {
+                    setBackgroundResource(R.drawable.card_background_open)
+                    this.text = value
+
+                }
                 setTextColor(Color.BLACK)
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 23f)
-                this.text = value
             }
 
             if (who == "diller") {
@@ -106,13 +113,13 @@ class MainActivity : AppCompatActivity() {
 
         val shuffled_cards = cards.shuffled().toMutableList()
         var diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
-        create_card(diller_cards[0], "diller")
-        create_card(diller_cards[1], "diller")
+        create_card(diller_cards[0], "diller", true)
+        create_card(diller_cards[1], "diller", false)
         shuffled_cards.removeAt(0)
         shuffled_cards.removeAt(0)
         var player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
-        create_card(player_cards[0], "player")
-        create_card(player_cards[1], "player")
+        create_card(player_cards[0], "player", false)
+        create_card(player_cards[1], "player", false)
         shuffled_cards.removeAt(0)
         shuffled_cards.removeAt(0)
 
@@ -136,8 +143,8 @@ class MainActivity : AppCompatActivity() {
             return points
         }
 
+        var diller_points = get_points(diller_cards.subList(1, diller_cards.lastIndex + 1))
         var player_points = get_points(player_cards)
-        var diller_points = get_points(diller_cards)
 
         val diller_points_text = findViewById<TextView>(R.id.diller_points_text)
         val player_points_text = findViewById<TextView>(R.id.player_points_text)
@@ -153,15 +160,15 @@ class MainActivity : AppCompatActivity() {
             diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
             shuffled_cards.removeAt(0)
             shuffled_cards.removeAt(0)
-            create_card(diller_cards[0], "diller")
-            create_card(diller_cards[1], "diller")
+            create_card(diller_cards[0], "diller", true)
+            create_card(diller_cards[1], "diller", false)
             player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
             shuffled_cards.removeAt(0)
             shuffled_cards.removeAt(0)
-            create_card(player_cards[0], "player")
-            create_card(player_cards[1], "player")
+            create_card(player_cards[0], "player", false)
+            create_card(player_cards[1], "player", false)
+            diller_points = get_points(diller_cards.subList(1, diller_cards.lastIndex + 1))
             player_points = get_points(player_cards)
-            diller_points = get_points(diller_cards)
             diller_points_text.text = "Очки диллера: $diller_points"
             player_points_text.text = "Ваши очки: $player_points"
 
@@ -172,7 +179,7 @@ class MainActivity : AppCompatActivity() {
         fun more_card(shuffled_cards: MutableList<String>) {
 
             player_cards.add(shuffled_cards[0])
-            create_card(shuffled_cards[0], "player")
+            create_card(shuffled_cards[0], "player", false)
             shuffled_cards.removeAt(0)
 
             player_points = get_points(player_cards)
@@ -182,6 +189,11 @@ class MainActivity : AppCompatActivity() {
 
 
             if (player_points > 21) {
+
+                diller_cards_layout.removeAllViews()
+                for (diller_card in diller_cards) {
+                    create_card(diller_card, "diller", false)
+                }
 
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Вы проиграли!")
@@ -199,7 +211,7 @@ class MainActivity : AppCompatActivity() {
             diller_points = get_points(diller_cards)
             while (diller_points < 17) {
                 diller_cards.add(shuffled_cards[0])
-                create_card(shuffled_cards[1], "diller")
+                create_card(shuffled_cards[1], "diller", false)
                 shuffled_cards.removeAt(0)
                 diller_points = get_points(diller_cards)
             }
@@ -223,6 +235,11 @@ class MainActivity : AppCompatActivity() {
 
                 val alert = builder.create()
                 alert.show()
+            }
+
+            diller_cards_layout.removeAllViews()
+            for (diller_card in diller_cards) {
+                create_card(diller_card, "diller", false)
             }
 
             diller_points_text.text = "Очки диллера: $diller_points"
