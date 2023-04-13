@@ -79,8 +79,10 @@ class MainActivity : AppCompatActivity() {
 
         fun create_card(value: String, who: String) {
             val button = Button(this).apply {
-                layoutParams = ViewGroup.LayoutParams(83.dpToPx(), 113.dpToPx())
-                backgroundTintList = ColorStateList.valueOf(Color.parseColor("#EEDEC2"))
+                layoutParams = ViewGroup.MarginLayoutParams(83.dpToPx(), 113.dpToPx()).apply {
+                    setMargins(8.dpToPx(), 0, 0, 0)
+                }
+                setBackgroundResource(R.drawable.button_background)
                 setTextColor(Color.BLACK)
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 23f)
                 this.text = value
