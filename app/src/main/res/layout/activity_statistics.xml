@@ -57,6 +57,16 @@
             android:textSize="27sp" />
 
         <TextView
+            android:id="@+id/drows_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:text="Ничьи:"
+            android:textColor="#FFFFFF"
+            android:textSize="27sp" />
+
+        <TextView
             android:id="@+id/procent_wins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,6 +75,8 @@
             android:text="Процент побед:"
             android:textColor="#FFFFFF"
             android:textSize="27sp" />
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,6 +87,7 @@
             <Button
                 android:id="@+id/reset"
                 android:layout_width="wrap_content"
+                android:textColor="@color/white"
                 android:layout_height="70dp"
                 android:layout_margin="5dp"
                 android:backgroundTint="@color/red"
@@ -85,6 +98,7 @@
             <Button
                 android:id="@+id/return_back"
                 android:layout_width="match_parent"
+                android:textColor="@color/white"
                 android:layout_height="70dp"
                 android:layout_margin="5dp"
                 android:backgroundTint="@color/black"

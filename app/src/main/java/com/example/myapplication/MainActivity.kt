@@ -241,6 +241,7 @@ class MainActivity : AppCompatActivity() {
 
             else if (diller_points == player_points) {
                 val builder = AlertDialog.Builder(this)
+                StatsManager.incrementDraws(this)
                 builder.setMessage("Ничья!")
                     .setCancelable(false)
                     .setNegativeButton("Выйти", { dialog, id -> finish() })
@@ -288,6 +289,7 @@ object StatsManager {
     private const val PREFS_NAME = "MyPrefs"
     private const val KEY_WINS = "wins"
     private const val KEY_LOSSES = "losses"
+    private const val KEY_DRAWS = "draws"
 
     fun incrementWins(context: Context) {
         val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -299,6 +301,17 @@ object StatsManager {
         val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val losses = prefs.getInt(KEY_LOSSES, 0)
         prefs.edit().putInt(KEY_LOSSES, losses + 1).apply()
+    }
+
+    fun incrementDraws(context: Context) {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val draws = prefs.getInt(KEY_DRAWS, 0)
+        prefs.edit().putInt(KEY_DRAWS, draws + 1).apply()
+    }
+
+    fun getDraws(context: Context): Int {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getInt(KEY_DRAWS, 0)
     }
 
     fun getWins(context: Context): Int {
@@ -315,7 +328,8 @@ object StatsManager {
     fun getWinPercentage(context: Context): Int {
         val wins = getWins(context)
         val losses = getLosses(context)
-        val totalGames = wins + losses
+        val draws = getDraws(context)
+        val totalGames = wins + losses + draws
 
         return if (totalGames > 0) {
             round((wins.toFloat() / totalGames.toFloat()) * 100).toInt()
@@ -328,6 +342,8 @@ object StatsManager {
         val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         prefs.edit().clear().apply()
     }
+
+
 }
 
 
