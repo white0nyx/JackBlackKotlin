@@ -183,12 +183,14 @@ class MainActivity : AppCompatActivity() {
             shuffled_cards.removeAt(0)
 
             player_points = get_points(player_cards)
-            diller_points = get_points(diller_cards)
+            diller_points = get_points(diller_cards.subList(1, diller_cards.lastIndex + 1))
             diller_points_text.text = "Очки диллера: $diller_points"
             player_points_text.text = "Ваши очки: $player_points"
 
 
             if (player_points > 21) {
+                diller_points = get_points(diller_cards)
+                diller_points_text.text = "Очки диллера: $diller_points"
 
                 diller_cards_layout.removeAllViews()
                 for (diller_card in diller_cards) {
@@ -216,7 +218,10 @@ class MainActivity : AppCompatActivity() {
                 diller_points = get_points(diller_cards)
             }
             Log.d("Ошибка", "$diller_points")
-            if (diller_points > player_points) {
+
+
+
+            if ((diller_points <= 21) && (diller_points > player_points)) {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Вы проиграли!")
                     .setCancelable(false)
@@ -226,6 +231,18 @@ class MainActivity : AppCompatActivity() {
                 val alert = builder.create()
                 alert.show()
             }
+
+            else if (diller_points == player_points) {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Ничья!")
+                    .setCancelable(false)
+                    .setNegativeButton("Выйти", { dialog, id -> finish() })
+                    .setPositiveButton("Новая игра",  { dialog, id -> reset_game() })
+
+                val alert = builder.create()
+                alert.show()
+            }
+
             else {
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Вы победили!")
