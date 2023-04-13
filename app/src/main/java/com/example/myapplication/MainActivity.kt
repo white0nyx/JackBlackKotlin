@@ -203,6 +203,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 val builder = AlertDialog.Builder(this)
+                StatsManager.incrementLosses(this)
                 builder.setMessage("Вы проиграли!")
                     .setCancelable(false)
                     .setNegativeButton("Выйти", { dialog, id -> finish() })
@@ -228,6 +229,7 @@ class MainActivity : AppCompatActivity() {
 
             if ((diller_points <= 21) && (diller_points > player_points)) {
                 val builder = AlertDialog.Builder(this)
+                StatsManager.incrementLosses(this)
                 builder.setMessage("Вы проиграли!")
                     .setCancelable(false)
                     .setNegativeButton("Выйти", { dialog, id -> finish() })
