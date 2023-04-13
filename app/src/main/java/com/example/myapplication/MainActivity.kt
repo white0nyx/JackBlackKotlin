@@ -1,17 +1,23 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.content.res.ColorStateList
+import android.content.res.Resources
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 
 class MainActivity : AppCompatActivity() {
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -63,42 +69,51 @@ class MainActivity : AppCompatActivity() {
             "A♠", "A♥", "A♣", "A♦",
         )
 
+        fun Int.dpToPx(): Int {
+            val metrics = Resources.getSystem().displayMetrics
+            return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), metrics).toInt()
+        }
 
+        val diller_cards_layout = findViewById<LinearLayout>(R.id.diller_cards_layout)
+        val player_cards_layout = findViewById<LinearLayout>(R.id.player_cards_layout)
+
+        fun create_card(value: String, who: String) {
+            val button = Button(this).apply {
+                layoutParams = ViewGroup.LayoutParams(83.dpToPx(), 113.dpToPx())
+                backgroundTintList = ColorStateList.valueOf(Color.parseColor("#EEDEC2"))
+                setTextColor(Color.BLACK)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 23f)
+                this.text = value
+            }
+
+            if (who == "diller") {
+                diller_cards_layout.addView(button)
+            }
+
+            else if (who == "player") {
+                player_cards_layout.addView(button)
+            }
+
+
+        }
 
 //        ДЛЯ ТЕСТОВ
 //        val shuffled_cards = mutableListOf("A♠", "9♠", "A♥", "9♥", "A♥", "3♥", "3♣")
 
-        val text_view = findViewById<TextView>(R.id.textView)
 
 
         val shuffled_cards = cards.shuffled().toMutableList()
         var diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
+        create_card(diller_cards[0], "diller")
+        create_card(diller_cards[1], "diller")
         shuffled_cards.removeAt(0)
         shuffled_cards.removeAt(0)
         var player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
+        create_card(player_cards[0], "player")
+        create_card(player_cards[1], "player")
         shuffled_cards.removeAt(0)
         shuffled_cards.removeAt(0)
 
-
-//        fun get_points(cards: MutableList<String>, count_points_now: Int): Int {
-//            var total_points = 0
-//            for (card in cards) {
-//                val base_card = card.substring(0, card.length - 1)
-//
-//                if (base_card == "A" && count_points_now >= 10) {
-//                    total_points += 1
-//
-//                } else {
-//                    val card_power = cards_powers[base_card]
-//                    if (card_power != null) {
-//                        total_points += card_power
-//                    }
-//                }
-//
-//            }
-//
-//            return total_points
-//        }
 
         fun get_points(cards: MutableList<String>): Int {
             var points = 0
@@ -119,81 +134,52 @@ class MainActivity : AppCompatActivity() {
             return points
         }
 
-        var diller_points = 0
-        var player_points = 0
+        var player_points = get_points(player_cards)
+        var diller_points = get_points(diller_cards)
 
-        player_points = get_points(player_cards)
-        diller_points = get_points(diller_cards)
-
-        var is_fast_diller_win = false
-        if (diller_points == 21) {
-
-            is_fast_diller_win = true
-//            val builder = AlertDialog.Builder(this)
-//            builder.setMessage("Вы проиграли").setPositiveButton("ОК") { dialog, id -> finish() }
-//            val alert = builder.create()
-//            alert.show()
-        }
-
-
-        text_view.text = "Карты диллера: ## ${
-            diller_cards.subList(
-                1,
-                diller_cards.lastIndex + 1
-            )
-        }\nОчков у диллера: $diller_points\n\n" +
-                "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
-        text_view.append("${shuffled_cards}")
+        val diller_points_text = findViewById<TextView>(R.id.diller_points_text)
+        val player_points_text = findViewById<TextView>(R.id.player_points_text)
+        diller_points_text.text = "Очки диллера: $diller_points"
+        player_points_text.text = "Ваши очки: $player_points"
 
 
         fun reset_game() {
 
             val shuffled_cards = cards.shuffled().toMutableList()
+            diller_cards_layout.removeAllViews()
+            player_cards_layout.removeAllViews()
             diller_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
             shuffled_cards.removeAt(0)
             shuffled_cards.removeAt(0)
+            create_card(diller_cards[0], "diller")
+            create_card(diller_cards[1], "diller")
             player_cards = mutableListOf<String>(shuffled_cards[0], shuffled_cards[1])
             shuffled_cards.removeAt(0)
             shuffled_cards.removeAt(0)
-
+            create_card(player_cards[0], "player")
+            create_card(player_cards[1], "player")
             player_points = get_points(player_cards)
             diller_points = get_points(diller_cards)
+            diller_points_text.text = "Очки диллера: $diller_points"
+            player_points_text.text = "Ваши очки: $player_points"
 
-            text_view.text = "Карты диллера: ## ${
-                diller_cards.subList(1, diller_cards.lastIndex + 1)}\nОчков у диллера: $diller_points\n\n" +
-                    "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
-            text_view.append("$shuffled_cards")
 
         }
 
 
         fun more_card(shuffled_cards: MutableList<String>) {
-//            var diller_points_now = get_points(diller_cards)
-//            Log.d("Ошибка", "$diller_points_now")
-//            while (diller_points_now < 17) {
-//                diller_cards.add(shuffled_cards[0])
-//                shuffled_cards.removeAt(0)
-//                diller_points_now = get_points(diller_cards)
-//            }
 
             player_cards.add(shuffled_cards[0])
+            create_card(shuffled_cards[0], "player")
             shuffled_cards.removeAt(0)
 
             player_points = get_points(player_cards)
             diller_points = get_points(diller_cards)
+            diller_points_text.text = "Очки диллера: $diller_points"
+            player_points_text.text = "Ваши очки: $player_points"
 
-
-
-            text_view.text = "Карты диллера: ## ${
-                diller_cards.subList(1, diller_cards.lastIndex + 1)}\nОчков у диллера: $diller_points\n\n" +
-                    "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
-            text_view.append("$shuffled_cards")
 
             if (player_points > 21) {
-
-                text_view.text = "Карты диллера: ${diller_cards}\nОчков у диллера: $diller_points\n\n" +
-                        "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
-                text_view.append("$shuffled_cards")
 
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Вы проиграли!")
@@ -208,10 +194,10 @@ class MainActivity : AppCompatActivity() {
 
         fun enough() {
 
-            var diller_points = get_points(diller_cards)
-            Log.d("Ошибка", "$diller_points")
+            diller_points = get_points(diller_cards)
             while (diller_points < 17) {
                 diller_cards.add(shuffled_cards[0])
+                create_card(shuffled_cards[1], "diller")
                 shuffled_cards.removeAt(0)
                 diller_points = get_points(diller_cards)
             }
@@ -237,12 +223,14 @@ class MainActivity : AppCompatActivity() {
                 alert.show()
             }
 
-            text_view.text = "Карты диллера: ${diller_cards}\nОчков у диллера: $diller_points\n\n" +
-                    "Ваши карты: $player_cards \nОчков у вас: $player_points\n\n Оставшиеся карты:"
-            text_view.append("$shuffled_cards")
+            diller_points_text.text = "Очки диллера: $diller_points"
+            player_points_text.text = "Ваши очки: $player_points"
+
         }
 
 
+        Log.d("Очки диллера", "$diller_points")
+        Log.d("Очки игрока", "$player_points")
 
         more_btn.setOnClickListener { more_card(shuffled_cards) }
         stop_btn.setOnClickListener { enough() }

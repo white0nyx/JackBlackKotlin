@@ -15,33 +15,57 @@
 
 
     <LinearLayout
+        android:id="@+id/llayout"
         android:layout_width="409dp"
         android:layout_height="729dp"
         android:orientation="vertical"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp"
-        tools:ignore="MissingConstraints">
+        tools:layout_editor_absoluteY="1dp">
 
         <ImageButton
             android:id="@+id/stop_game_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:rotation="180"
             android:layout_gravity="end"
+            android:rotation="180"
             app:srcCompat="?attr/actionModeCloseDrawable" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/diller_points_text"
             android:layout_width="match_parent"
-            android:layout_height="581dp"
-            android:text="TextView"
-            android:textSize="25sp"/>
+            android:layout_height="50dp"
+            android:text="Очки диллера: "
+            android:textSize="25sp" />
+
+        <LinearLayout
+            android:id="@+id/diller_cards_layout"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/player_points_text"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Ваши очки: "
+            android:textSize="25sp" />
+
+        <LinearLayout
+            android:id="@+id/player_cards_layout"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:orientation="horizontal">
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
 
             <Button
@@ -58,10 +82,10 @@
                 android:id="@+id/button_stop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="25sp"
-                android:backgroundTint="@color/red"
                 android:layout_margin="5dp"
-                android:text="ХВАТИТ" />
+                android:backgroundTint="@color/red"
+                android:text="ХВАТИТ"
+                android:textSize="25sp" />
         </LinearLayout>
 
 
