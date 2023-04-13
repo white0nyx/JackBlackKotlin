@@ -1,6 +1,9 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -8,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.math.round
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         val stop_btn = findViewById<Button>(R.id.button_stop)
 
         stop_game_btn.setOnClickListener {
+            StatsManager.incrementLosses(this)
             val builder = AlertDialog.Builder(this)
             builder.setMessage("Вы уверены, что хотите покинуть игру? Выход из игры будет засчитан, как поражение.")
                 .setCancelable(false)
@@ -205,7 +210,6 @@ class MainActivity : AppCompatActivity() {
                 alert.show()
             }
         }
-
         fun enough() {
 
             var diller_points = get_points(diller_cards)
@@ -216,7 +220,8 @@ class MainActivity : AppCompatActivity() {
                 diller_points = get_points(diller_cards)
             }
             Log.d("Ошибка", "$diller_points")
-            if (diller_points > player_points) {
+            if ((diller_points <= 21) && (diller_points > player_points)) {
+                StatsManager.incrementLosses(this)
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Вы проиграли!")
                     .setCancelable(false)
@@ -226,7 +231,9 @@ class MainActivity : AppCompatActivity() {
                 val alert = builder.create()
                 alert.show()
             }
+
             else {
+                StatsManager.incrementWins(this)
                 val builder = AlertDialog.Builder(this)
                 builder.setMessage("Вы победили!")
                     .setCancelable(false)
@@ -248,10 +255,54 @@ class MainActivity : AppCompatActivity() {
         stop_btn.setOnClickListener { enough() }
 
     }
+
+
 }
 
+object StatsManager {
+    private const val PREFS_NAME = "MyPrefs"
+    private const val KEY_WINS = "wins"
+    private const val KEY_LOSSES = "losses"
+
+    fun incrementWins(context: Context) {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val wins = prefs.getInt(KEY_WINS, 0)
+        prefs.edit().putInt(KEY_WINS, wins + 1).apply()
+    }
+
+    fun incrementLosses(context: Context) {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val losses = prefs.getInt(KEY_LOSSES, 0)
+        prefs.edit().putInt(KEY_LOSSES, losses + 1).apply()
+    }
+
+    fun getWins(context: Context): Int {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getInt(KEY_WINS, 0)
+    }
+
+    fun getLosses(context: Context): Int {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getInt(KEY_LOSSES, 0)
+    }
 
 
+    fun getWinPercentage(context: Context): Int {
+        val wins = getWins(context)
+        val losses = getLosses(context)
+        val totalGames = wins + losses
 
+        return if (totalGames > 0) {
+            round((wins.toFloat() / totalGames.toFloat()) * 100).toInt()
+        } else {
+            0
+        }
+    }
+
+    fun resetStats(context: Context) {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        prefs.edit().clear().apply()
+    }
+}
 
 
